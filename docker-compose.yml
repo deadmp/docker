@@ -1,0 +1,85 @@
+version: '3.6'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.2.4
+    container_name: kibana
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      xpack.security.enabled: "false"
+    networks:
+      - esnet
+    ports:
+      - 5602:5601
+    depends_on:
+      - elasticsearch
+  logstash:
+    image: docker.elastic.co/logstash/logstash:6.2.4
+    container_name: logstash
+    depends_on:
+      - elasticsearch
+#      - mysql
+    network_mode: "host"
+    volumes:
+      - type: bind
+        source: ./logstash/config
+        target: /usr/share/logstash/config
+      - type: bind
+        source: ./logstash/driver
+        target: /usr/share/logstash/driver
+#  mysql:
+#    image: mysql
+#    container_name: mysql
+#    environment:
+#      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+#      MYSQL_ROOT_PASSWORD: ""
+#      MYSQL_TCP_PORT: 3307
+#    networks:
+#      - esnet
+#    ports:
+#      - 3307:3307
+#    restart: always
+  core:
+    build: base
+    image: noviom/phoenix:v1
+    container_name: core
+    environment:
+      - MIX_ENV=dev
+      - PORT=4001
+    command: mix phoenix.server
+    ports:
+      - 4001:4001
+    volumes:
+      - type: bind
+        source: ./core
+        target: /usr/share/code
+      - type: bind
+        source: ../ueberauth_nopass
+        target: /usr/share/ueberauth_nopass
+    
+    
+
+
+volumes:
+  esdata1:
+    driver: local
+
+networks:
+  esnet:
