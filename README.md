@@ -12,7 +12,6 @@
                
            DEAD MP GAMES WHALEship
              DOCKERIZED BUILDS.
-```
 
 The underlying code is not yet open sourced. If you want
 to help, hop on over to discord and ask. There's a link
@@ -25,3 +24,5 @@ development. If you have any experience in Vue / Polymer
 / React We'd especially like your help :)
 
 ~ novium
+
+```
