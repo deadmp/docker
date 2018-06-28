@@ -1,0 +1,6 @@
+[submodule "wiki"]
+	path = wiki
+	url = https://github.com/novium/wiki.git
+[submodule "core"]
+	path = core
+	url = https://github.com/novium/core.git
