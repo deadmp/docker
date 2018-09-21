@@ -1,0 +1,5 @@
+network.host: 0.0.0.0
+
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+http.cors.allow-headers: "Accept, Accept-Encoding, Accept-Language, Access-Control-Request-Headers, Access-Control-Request-Method, Connection, DNT, Host, Origin, User-Agent"

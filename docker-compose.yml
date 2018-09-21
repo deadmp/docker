@@ -13,6 +13,7 @@ services:
         hard: -1
     volumes:
       - esdata1:/usr/share/elasticsearch/data
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - 9200:9200
     networks:
@@ -36,7 +37,9 @@ services:
     depends_on:
       - elasticsearch
       - mysql
-    network_mode: "host"
+    networks:
+      - mysql
+      - esnet
     volumes:
       - type: bind
         source: ./logstash/config
@@ -94,6 +97,7 @@ services:
     networks:
       - wikinet
       - mysql
+      - esnet
     depends_on:
       - mysql
     volumes:
